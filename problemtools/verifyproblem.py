@@ -845,7 +845,7 @@ class Attachments(ProblemAspect):
 
 _JUNK_CASES = [
     ('an empty file', b''),
-    ('a binary file with byte values 0 up to 256', bytearray(x for x in range(256))),
+#    ('a binary file with byte values 0 up to 256', bytearray(x for x in range(256))),
     ('a text file with the ASCII characters 32 up to 127', bytearray(x for x in range(32, 127))),
     ('a random text file with printable ASCII characters', bytearray(random.choice(string.printable.encode('utf8')) for _ in range(200))),
 ]
