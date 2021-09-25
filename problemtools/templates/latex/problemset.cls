@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{problemset}[2012/01/19 Problem Set For ACM-Style Programming Contests]
+\ProvidesClass{problemset}[2021/25/09 Problem Set For ACM-Style Programming Contests - modified]
 
 
 \newif\ifplastex
@@ -33,7 +33,10 @@
 
 \LoadClass{article}
 
-\RequirePackage{times}            % Font choice
+\RequirePackage{lmodern}          % Font choice
+\renewcommand{\familydefault}{\sfdefault}
+%\usepackage{cmbright}
+
 \RequirePackage{amsmath}          % AMS
 \RequirePackage{amssymb}          % AMS
 \RequirePackage[OT2,T1]{fontenc}  % Cyrillic and standard % TODO: make alphabet options more general
@@ -199,11 +202,10 @@
 
 \newread\ps@timelimitfile
 \newcommand{\problemheader}[2]{
-  \begin{center}
-    \textsf{
-      \if@problemnumbers {\huge Problem \problemnumber\\[3mm]}  \fi
-      {\LARGE #1}
-      \if@problemids {\\[2mm]{\Large Problem ID: #2}} \fi
+  \begin{center}%
+    \textsf{\if@problemnumbers{\huge Problem \problemnumber\\[3mm]}\fi%
+      {\LARGE #1}%
+      \if@problemids {\\[2mm]{\Large Problem ID: #2}} \fi%
       \IfFileExists{#2/.timelimit}{
         \openin\ps@timelimitfile=#2/.timelimit
         \read\ps@timelimitfile to\ps@timelimit
@@ -213,9 +215,8 @@
       \\[5mm]
     }
   \end{center}
-  \addtocontents{toc}{
-    \if@problemnumbers \problemnumber \fi
-    & \@problemname \\}%
+
+  \addtocontents{prob}{\if@problemnumbers\problemnumber\fi & \@problemname\\}
 }
 
 %% Commands related to sample data
@@ -277,8 +278,8 @@
 
 \newcommand{\sampletable}[4]{
   % First find widths of the two files
-  \savebox{\PS@sampleinbox}{\lstinputlisting[inputencoding=utf8/latin1,basicstyle=\ttfamily]{#2}}
-  \savebox{\PS@sampleoutbox}{\lstinputlisting[inputencoding=utf8/latin1,basicstyle=\ttfamily]{#4}}
+  \savebox{\PS@sampleinbox}{\lstinputlisting[inputencoding=utf8/latin1,basicstyle=\ttfamily\small]{#2}}
+  \savebox{\PS@sampleoutbox}{\lstinputlisting[inputencoding=utf8/latin1,basicstyle=\ttfamily\small]{#4}}
   \settowidth{\PS@sampleoutwidth}{\usebox{\PS@sampleoutbox}}
   \settowidth{\PS@sampleinwidth}{\usebox{\PS@sampleinbox}}
   \setlength{\PS@sampletotwidth}{\PS@sampleinwidth}
@@ -415,15 +416,87 @@
   \pagestyle{problem}
 
   % Set up table of contents for cover page
-  \addtocontents{toc}{\protect\begin{tabular}{cl}}
+  \addtocontents{prob}{\begin{tabular}{cl}}%
 }
 
 \AtEndDocument{
   \clearproblemsetpage
   % Annoyingly enough addtocontents won't work at end of doc
   \immediate\write\@auxout{%
-    \string\@writefile{toc}{\string\end{tabular}}%
+    \string\@writefile{prob}{\string\end{tabular}}%
   }
 }
 
 \fi
+
+
+
+% MODIFICATIONS
+
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{1.5mm}
+
+\newenvironment{coverpage}{
+  \thispagestyle{empty}
+  \topskip60pt
+  \begin{center}
+    \ifx \@contestname \@empty
+      \ifx \@contestshortname \@empty
+        \ClassError{problemset}{Must provide either contest name or contest short name for cover page.}{}
+      \else
+        {\Huge \@contestshortname}
+      \fi
+    \else
+      {\Huge \@contestname}
+    \fi
+    \\
+    %
+    \vspace{1.0cm}
+    %
+    \ifx \@location \@empty \relax \else
+      {\Large \@location}\\
+      \vspace{0.5cm}
+    \fi
+    %
+    \ifx \@author \@empty
+      \ClassError{problemset}{Must provide author list}{}
+    \else
+      {\Large \@author{}}\\
+      \vspace{0.5cm}
+    \fi
+    %
+    \ifx \@contestlogo \@empty \relax \else
+      \includegraphics[height=1cm]{\@contestlogo}\\
+    \fi
+  \end{center}
+}{
+  \vspace{2cm}
+  \cleardoublepage
+  \setcounter{page}{1}
+}
+
+
+%quote
+\RequirePackage{changepage}
+\newenvironment{myquote}{
+  \begin{adjustwidth}{4em}{4em}\begin{itshape}{\bf \Large ``}
+}{
+  \hfill{\bf \Large ''}\end{itshape}\end{adjustwidth}
+}
+
+\RequirePackage{xfrac}
+%\usepackage[subfigure]{tocloft}
+%\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+%\renewcommand{\@cftmaketoctitle}{}
+
+
+\renewcommand\tableofcontents{%
+  \begin{tabular}{cl}
+    \@starttoc{prob}%
+  \end{tabular}
+}
+\makeatother
+
+\makeatletter
+\renewcommand*{\l@section}[2]{#1}
+\makeatother
