@@ -147,8 +147,8 @@ java:
     name: 'Java'
     priority: 800
     files: '*.java'
-    compile: '/usr/bin/env javac -encoding UTF-8 -sourcepath {path} -d {path} {files}'
-    run: '/usr/bin/env java -Dfile.encoding=UTF-8 -XX:+UseSerialGC -Xss64m -Xms{memlim}m -Xmx{memlim}m -cp {path} {mainclass}'
+    compile: '/usr/bin/env javac -J-Xlog:all=error -encoding UTF-8 -sourcepath {path} -d {path} {files}'
+    run: '/usr/bin/env java -Dfile.encoding=UTF-8 -Xlog:all=error -XX:+UseSerialGC -Xss64m -Xms{memlim}m -Xmx{memlim}m -cp {path} {mainclass}'
 
 javascript:
     name: 'JavaScript'
