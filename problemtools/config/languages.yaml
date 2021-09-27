@@ -242,7 +242,7 @@ rust:
     name: 'Rust'
     priority: 575
     files: '*.rs'
-    compile: '/usr/bin/env rustc --cfg 'DOMJUDGE' -O -o{binary} --crate-type bin --edition=2018 {files}'
+    compile: '/usr/bin/env rustc --cfg DOMJUDGE -O -o{binary} --crate-type bin --edition=2018 {files}'
     run: '{binary}'
 
 #scala:
