@@ -40,14 +40,13 @@
 \RequirePackage{amsmath}          % AMS
 \RequirePackage{amssymb}          % AMS
 \RequirePackage[OT2,T1]{fontenc}  % Cyrillic and standard % TODO: make alphabet options more general
-\RequirePackage[utf8]{inputenc}   % UTF-8 support
 \RequirePackage{fancyhdr}         % Headers
 \RequirePackage{graphicx}         % Graphics
 \RequirePackage{subfigure}        % Subfigures
 \RequirePackage{wrapfig}          % Illustrations
 \RequirePackage{import}           % Proper file inclusion
 \RequirePackage{fancyvrb}         %
-\RequirePackage{listingsutf8}     % For samples
+%\RequirePackage{listingsutf8}     % For samples
 \RequirePackage[left=1in,right=1in,top=0.75in,bottom=0.75in]{geometry}
 %\RequirePackage{fullpage}        % Set up margins for full page
 \RequirePackage{url}              % Urls
