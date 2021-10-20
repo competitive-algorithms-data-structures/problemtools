@@ -33,6 +33,8 @@
 
 \LoadClass{article}
 
+\RequirePackage[english]{babel}
+\RequirePackage[final]{microtype}
 \RequirePackage{lmodern}          % Font choice
 \renewcommand{\familydefault}{\sfdefault}
 %\usepackage{cmbright}
@@ -46,12 +48,30 @@
 \RequirePackage{wrapfig}          % Illustrations
 \RequirePackage{import}           % Proper file inclusion
 \RequirePackage{fancyvrb}         %
-%\RequirePackage{listingsutf8}     % For samples
+\RequirePackage{listings}
+%%\RequirePackage{listingsutf8}     % For samples
 \RequirePackage[left=1in,right=1in,top=0.75in,bottom=0.75in]{geometry}
 %\RequirePackage{fullpage}        % Set up margins for full page
 \RequirePackage{url}              % Urls
 \RequirePackage[normalem]{ulem}   % \sout
 \RequirePackage[colorlinks=true,implicit=false]{hyperref}
+\RequirePackage{booktabs}
+\RequirePackage{csquotes}
+\RequirePackage{setspace}
+
+%\usepackage{lstautogobble}
+%\lstset{
+%	basicstyle=\scriptsize\ttfamily,
+%	autogobble,
+%	xleftmargin=0.1cm,
+%	aboveskip=0cm,
+%	belowskip=0cm,
+%	commentstyle=\color{green},
+%	keywordstyle=\color{blue},
+%	numberstyle=\color{gray},
+%	stringstyle=\color{purple}
+%}
+
 \ifplastex\else
 \RequirePackage{xstring}
 \RequirePackage{pgffor}
@@ -91,18 +111,12 @@
 
 % Typesetting sections in a problem
 
-\renewcommand\section{\@startsection{section}{1}{\z@}%
-                                   {-3ex}%
-                                   {1ex}%
-                                   {\normalfont\large\sf\bfseries}}
+\renewcommand{\section}{\@startsection{section}{1}{\z@}{-3ex}{1ex}{\normalfont\large\sf\bfseries}}
 \newenvironment{Input}{\section*{Input}}{}
 \newenvironment{Output}{\section*{Output}}{}
 \newenvironment{Interaction}{\section*{Interaction}}{}
 
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
-                                     {-3.55ex}%
-                                     {1.7ex}%
-                                     {\normalfont\normalsize\sf\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}{-3.55ex}{1.7ex}{\normalfont\normalsize\sf\bfseries}}
 
 \renewcommand{\contentsname}{Problems}
 
@@ -244,7 +258,7 @@
       \ClassError{problemset}{Can't find any sample named #1}{}
     }
   }
-    
+
 }
 
 \newcommand{\displaysample}[1]{
@@ -350,7 +364,7 @@
       \vspace{-\parskip}
       \vspace{0.05cm}
       \par\noindent
-      \if w\curmode\hfill\fi    
+      \if w\curmode\hfill\fi
       \begin{tabular}{|l|}
         \hline
         \parbox[t]{0.55\textwidth}{
@@ -428,10 +442,6 @@
 
 \fi
 
-
-
-% MODIFICATIONS
-
 \setlength{\parindent}{0mm}
 \setlength{\parskip}{1.5mm}
 
@@ -453,15 +463,13 @@
     \vspace{1.0cm}
     %
     \ifx \@location \@empty \relax \else
-      {\Large \@location}\\
-      \vspace{0.5cm}
+      {\Large \@location}\\[0.5cm]
     \fi
     %
     \ifx \@author \@empty
       \ClassError{problemset}{Must provide author list}{}
     \else
-      {\Large \@author{}}\\
-      \vspace{0.5cm}
+      {\setstretch{1.25} \Large \@author{} \\[0.5cm]}
     \fi
     %
     \ifx \@contestlogo \@empty \relax \else
