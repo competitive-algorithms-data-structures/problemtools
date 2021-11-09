@@ -234,10 +234,10 @@ class TestCase(ProblemAspect):
             return (res1, res2, True)
 
         outfile = os.path.join(self._problem.tmpdir, 'output')
-        if sys.stdout.isatty():
-            msg = 'Running %s on %s...' % (sub, self)
-            sys.stdout.write('%s' % msg)
-            sys.stdout.flush()
+        # if sys.stdout.isatty():
+        #     msg = 'Running %s on %s...' % (sub, self)
+        #     sys.stdout.write('%s' % msg)
+        #     sys.stdout.flush()
 
         if self._problem.is_interactive:
             res2 = self._problem.output_validators.validate_interactive(self, sub, timelim_high, self._problem.submissions)
@@ -252,8 +252,8 @@ class TestCase(ProblemAspect):
             else:
                 res2 = self._problem.output_validators.validate(self, outfile)
             res2.runtime = runtime
-        if sys.stdout.isatty():
-            sys.stdout.write('%s' % '\b \b' * (len(msg)))
+        # if sys.stdout.isatty():
+        #     sys.stdout.write('%s' % '\b \b' * (len(msg)))
         if res2.runtime <= timelim_low:
             res1 = res2
         elif res2.validator_first and res2.verdict == 'WA':
