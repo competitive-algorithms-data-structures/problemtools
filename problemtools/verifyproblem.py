@@ -227,7 +227,7 @@ class TestCase(ProblemAspect):
         if res1.verdict != 'AC' and self.is_in_sample_group():
             res1.sample_failures.append(res1)
 
-        return (res1, res2)
+        return res1, res2
 
     def _run_submission_real(self, sub, args, timelim_low, timelim_high):
         if self.reuse_result_from is not None:
@@ -239,6 +239,7 @@ class TestCase(ProblemAspect):
             return (res1, res2, True)
 
         outfile = os.path.join(self._problem.tmpdir, 'output')
+        errfile = os.path.join(self._problem.tmpdir, 'error')
         # if sys.stdout.isatty():
         #     msg = 'Running %s on %s...' % (sub, self)
         #     sys.stdout.write('%s' % msg)
@@ -247,13 +248,17 @@ class TestCase(ProblemAspect):
         if self._problem.is_interactive:
             res2 = self._problem.output_validators.validate_interactive(self, sub, timelim_high, self._problem.submissions)
         else:
-            status, runtime = sub.run(self.infile, outfile,
+            status, runtime = sub.run(infile=self.infile, outfile=outfile, errfile=errfile,
                                       timelim=timelim_high+1,
-                                      memlim=self._problem.config.get('limits')['memory'])
+                                      memlim=self._problem.config.get('limits')['memory'],
+                                      )
             if is_TLE(status) or runtime > timelim_high:
                 res2 = SubmissionResult('TLE')
             elif is_RTE(status):
-                res2 = SubmissionResult('RTE')
+                if os.path.isfile(errfile):
+                    with open(errfile, mode="rt") as f:
+                        info = f.read()
+                res2 = SubmissionResult('RTE', additional_info=info)
             else:
                 res2 = self._problem.output_validators.validate(self, outfile)
             res2.runtime = runtime
@@ -1411,8 +1416,7 @@ class Submissions(ProblemAspect):
 
                     success, msg = sub.compile()
                     if not success:
-                        self.error('Compile error for %s submission %s' % (acr, sub),
-                                   additional_info=msg)
+                        self.error('Compile error for %s submission %s' % (acr, sub), additional_info=msg)
                         continue
 
                     res = self.check_submission(sub, args, acr, timelim, timelim_margin_lo, timelim_margin)
@@ -1564,7 +1568,7 @@ def main():
     fmt = "%(levelname)s %(message)s"
     logging.basicConfig(stream=sys.stdout,
                         format=fmt,
-                        level=eval("log." + args.log_level.upper()))
+                        level=eval("logging." + args.log_level.upper()))
 
     total_errors = 0
     for problemdir in args.problemdir:
