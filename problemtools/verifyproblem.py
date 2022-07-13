@@ -142,7 +142,7 @@ class TestCase(ProblemAspect):
         self._problem = problem
         self.testcasegroup = testcasegroup
         self.reuse_result_from = None
-        self._result_cache = (None, None)
+        self._result_cache = (None, (None, None))
         problem.testcase_by_infile[self.infile] = self
 
     def check_newlines(self, filename):
@@ -234,9 +234,10 @@ class TestCase(ProblemAspect):
             return self.reuse_result_from._run_submission_real(sub, args, timelim_low, timelim_high)
 
         cache_key = (sub, args, timelim_low, timelim_high)
-        if self._result_cache[0] == cache_key:
-            res1, res2 = self._result_cache[1]
-            return (res1, res2, True)
+        if not hasattr(args, "use_result_cache") or args.use_result_cache:
+            if self._result_cache[0] == cache_key:
+                res1, res2 = self._result_cache[1]
+                return res1, res2, True
 
         outfile = os.path.join(self._problem.tmpdir, 'output')
         errfile = os.path.join(self._problem.tmpdir, 'error')
@@ -277,7 +278,7 @@ class TestCase(ProblemAspect):
         res1.set_ac_runtime()
         res2.set_ac_runtime()
         self._result_cache = (cache_key, (res1, res2))
-        return (res1, res2, False)
+        return res1, res2, False
 
     def _init_result_for_testcase(self, res):
         res = copy.copy(res)
@@ -1556,7 +1557,7 @@ def argparser():
 
 
 def default_args():
-    return argparser().parse_args([None])
+    return argparser().parse_args([""])
 
 
 
