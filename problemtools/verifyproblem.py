@@ -256,6 +256,7 @@ class TestCase(ProblemAspect):
             if is_TLE(status) or runtime > timelim_high:
                 res2 = SubmissionResult('TLE')
             elif is_RTE(status):
+                info = ""
                 if os.path.isfile(errfile):
                     with open(errfile, mode="rt") as f:
                         info = f.read()

@@ -109,8 +109,7 @@ class Program(object):
 
                 os.execvp(argv[0], argv)
             except Exception as exc:
-                print("Oops. Fatal error in child process:")
-                print(exc)
+                log.warning("Oops. Fatal error in child process:", exc_info=exc)
                 os.kill(os.getpid(), signal.SIGTERM)
             # Unreachable
             log.error("Unreachable part of run_wait reached")
